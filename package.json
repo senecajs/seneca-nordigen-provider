@@ -51,8 +51,5 @@
   "peerDependencies": {
     "seneca": ">=3",
     "seneca-promisify": ">=2"
-  },
-  "dependencies": {
-    "@octokit/rest": "^18.12.0"
   }
 }
