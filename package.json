@@ -51,5 +51,8 @@
   "peerDependencies": {
     "seneca": ">=3",
     "seneca-promisify": ">=2"
+  },
+  "dependencies": {
+    "nordigen-node": "^1.0.1"
   }
 }
