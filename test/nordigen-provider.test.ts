@@ -5,8 +5,8 @@ import * as Fs from 'fs'
 import NordigenProvider from '../src/nordigen-provider'
 
 const Seneca = require('seneca')
-// const SenecaMsgTest = require('seneca-msg-test')
-// const NordigenProviderMessages = require('./nordigen-provider.messages').default
+const SenecaMsgTest = require('seneca-msg-test')
+const NordigenProviderMessages = require('./nordigen-provider.messages').default
 
 const CONFIG: any = {}
 
@@ -39,27 +39,27 @@ describe('nordigen-provider', () => {
     })
 
 
-    // test('messages', async () => {
-    //     const seneca = Seneca({legacy: false})
-    //         .test()
-    //         .use('promisify')
-    //         .use('provider', {
-    //             provider: {
-    //                 nordigen: {
-    //                     keys: {
-    //                         secretId: {
-    //                             value: CONFIG.id
-    //                         },
-    //                         secretKey: {
-    //                             value: CONFIG.key
-    //                         },
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //         .use(NordigenProvider)
-    //     await (SenecaMsgTest(seneca, NordigenProviderMessages)())
-    // })
+    test('messages', async () => {
+        const seneca = Seneca({legacy: false})
+            .test()
+            .use('promisify')
+            .use('provider', {
+                provider: {
+                    nordigen: {
+                        keys: {
+                            secretId: {
+                                value: CONFIG.id
+                            },
+                            secretKey: {
+                                value: CONFIG.key
+                            },
+                        }
+                    }
+                }
+            })
+            .use(NordigenProvider)
+        await (SenecaMsgTest(seneca, NordigenProviderMessages)())
+    })
 
     test('native', async () => {
         const seneca = Seneca({legacy: false})
