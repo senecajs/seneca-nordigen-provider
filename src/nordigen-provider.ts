@@ -1,11 +1,8 @@
 /* Copyright © 2021 Seneca Project Contributors, MIT License. */
 
-
 import NordigenClient from 'nordigen-node'
 
-
 type NordigenProviderOptions = {}
-
 
 function NordigenProvider(this: any, _options: any) {
     const seneca: any = this
