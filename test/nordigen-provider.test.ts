@@ -6,7 +6,7 @@ import NordigenProvider from '../src/nordigen-provider'
 
 const Seneca = require('seneca')
 // const SenecaMsgTest = require('seneca-msg-test')
-// const GithubProviderMessages = require('./github-provider.messages').default
+// const NordigenProviderMessages = require('./nordigen-provider.messages').default
 
 const CONFIG: any = {}
 
@@ -45,42 +45,47 @@ describe('nordigen-provider', () => {
     //         .use('promisify')
     //         .use('provider', {
     //             provider: {
-    //                 github: {
+    //                 nordigen: {
     //                     keys: {
-    //                         api: {
+    //                         secretId: {
+    //                             value: CONFIG.id
+    //                         },
+    //                         secretKey: {
     //                             value: CONFIG.key
-    //                         }
+    //                         },
     //                     }
     //                 }
     //             }
     //         })
     //         .use(NordigenProvider)
-    //     await (SenecaMsgTest(seneca, GithubProviderMessages)())
+    //     await (SenecaMsgTest(seneca, NordigenProviderMessages)())
     // })
-    //
-    //
-    // test('native', async () => {
-    //     const seneca = Seneca({legacy: false})
-    //         .test()
-    //         .use('promisify')
-    //         .use('provider', {
-    //             provider: {
-    //                 github: {
-    //                     keys: {
-    //                         api: {
-    //                             value: CONFIG.key
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //         .use(NordigenProvider)
-    //     await seneca.ready()
-    //
-    //     let native = seneca.export('NordigenProvider/native')
-    //     expect(native().octokit).toBeDefined()
-    // })
-    //
+
+    test('native', async () => {
+        const seneca = Seneca({legacy: false})
+            .test()
+            .use('promisify')
+            .use('provider', {
+                provider: {
+                    nordigen: {
+                        keys: {
+                            secretId: {
+                                value: CONFIG.id
+                            },
+                            secretKey: {
+                                value: CONFIG.key
+                            },
+                        }
+                    }
+                }
+            })
+            .use(NordigenProvider)
+        await seneca.ready()
+
+        let native = seneca.export('NordigenProvider/native')
+        expect(native().nordigenClient).toBeDefined()
+    })
+
     //
     // test('entity-load', async () => {
     //     const seneca = Seneca({legacy: false})
