@@ -42,7 +42,6 @@ describe('nordigen-provider', () => {
     test('messages', async () => {
         const seneca = Seneca({legacy: false})
             .test()
-            .use('promisify')
             .use('provider', {
                 provider: {
                     nordigen: {
