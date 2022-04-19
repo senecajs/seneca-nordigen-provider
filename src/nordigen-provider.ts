@@ -1,5 +1,8 @@
 /* Copyright © 2021 Seneca Project Contributors, MIT License. */
 
+
+// TODO: namespace provider zone; needs seneca-entity feature
+
 import NordigenClient from 'nordigen-node'
 
 type NordigenProviderOptions = {}
