@@ -6,18 +6,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // TODO: namespace provider zone; needs seneca-entity feature
 const nordigen_node_1 = __importDefault(require("nordigen-node"));
+const cmd_handlers_1 = require("./cmd-handlers");
+const entities_1 = require("./entities");
 function NordigenProvider(_options) {
     const seneca = this;
     const ZONE_BASE = 'provider/nordigen/';
-    let nordigenClient;
+    let sdk = { nordigenClient: undefined };
     // NOTE: sys- zone prefix is reserved.
+    add_actions();
     seneca
         .message('sys:provider,provider:nordigen,get:info', get_info);
-    // .message('role:entity,cmd:load,zone:provider,base:nordigen,name:repo',
-    //     load_repo)
-    //
-    // .message('role:entity,cmd:save,zone:provider,base:nordigen,name:repo',
-    //     save_repo)
+    function add_actions() {
+        const actions = prepare_actions(entities_1.entities);
+        for (const action of actions) {
+            switch (action.pattern.cmd) {
+                case 'load':
+                    seneca.message(action.pattern, make_load(action));
+                    break;
+            }
+        }
+    }
+    function make_load(action) {
+        return (0, cmd_handlers_1.make_actions)(action.sdk_params, action.action_details, sdk)['load'];
+    }
+    function prepare_actions(entities) {
+        const actions_data = [];
+        for (const [ent_name, data] of Object.entries(entities)) {
+            const { actions } = data;
+            data.name = ent_name;
+            for (const [action_name, action_details] of Object.entries(actions)) {
+                const pattern = {
+                    name: ent_name,
+                    cmd: action_name,
+                    zone: 'provider',
+                    base: 'nordigenClient',
+                    role: 'entity',
+                };
+                actions_data.push({
+                    pattern,
+                    sdk_params: data.sdk,
+                    action_details,
+                });
+            }
+        }
+        return actions_data;
+    }
     async function get_info(_msg) {
         return {
             ok: true,
@@ -27,62 +60,18 @@ function NordigenProvider(_options) {
             }
         };
     }
-    // async function load_repo(this: any, msg: any) {
-    //     let ent: any = null
-    //
-    //     let q: any = msg.q
-    //     let [ownername, reponame]: [string, string] = q.id.split('/')
-    //
-    //     let res = await octokit.rest.repos.get({
-    //         owner: ownername,
-    //         repo: reponame,
-    //     })
-    //
-    //     if (res && 200 === res.status) {
-    //         let data: any = res.data
-    //         data.nordigen_id = data.id
-    //         data.id = q.id
-    //         ent = this.make$(ZONE_BASE + 'repo').data$(data)
-    //     }
-    //
-    //     return ent
-    // }
-    //
-    //
-    // async function save_repo(this: any, msg: any) {
-    //     let ent: any = msg.ent
-    //
-    //     let [ownername, reponame]: [string, string] = ent.id.split('/')
-    //
-    //     let data = {
-    //         owner: ownername,
-    //         repo: reponame,
-    //         description: ent.description
-    //     }
-    //
-    //     let res = await octokit.rest.repos.update(data)
-    //
-    //     if (res && 200 === res.status) {
-    //         let data: any = res.data
-    //         data.nordigen_id = data.id
-    //         data.id = ownername + '/' + reponame
-    //         ent = this.make$(ZONE_BASE + 'repo').data$(data)
-    //     }
-    //
-    //     return ent
-    // }
     seneca.prepare(async function () {
         let secretId = await this.post('sys:provider,get:key,provider:nordigen,key:secretId');
         let secretKey = await this.post('sys:provider,get:key,provider:nordigen,key:secretKey');
         if (!secretId.value || !secretKey.value) {
             this.fail('secretId or secretKey missing');
         }
-        nordigenClient = new nordigen_node_1.default({ secretId: secretId.value, secretKey: secretKey.value });
+        sdk.nordigenClient = new nordigen_node_1.default({ secretId: secretId.value, secretKey: secretKey.value });
     });
     return {
         exports: {
             native: () => ({
-                nordigenClient
+                nordigenClient: sdk.nordigenClient
             })
         }
     };
