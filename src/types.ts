@@ -22,7 +22,7 @@ type TasksTypesFn = {
     set: (task: Task, context: Context) => void
 }
 
-type ActionType = "load" | "save" | "update" | "delete"
+type ActionType = "load"
 
 type ActionDetails = {
     cb_name: string
