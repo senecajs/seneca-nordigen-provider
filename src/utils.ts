@@ -34,7 +34,6 @@ function set(task: Task, context: Context) {
 
     const source = context[source_name as keyof Context]
     const source_field: any = task.set[source_name as keyof Context]
-
     target[target_field] = source[source_field]
 }
 
