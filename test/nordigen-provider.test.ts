@@ -2,9 +2,9 @@
 
 import * as Fs from 'fs'
 
-// import {entities_tests} from "./entities-mock"
-// import {set_mock_worker} from './set-mock-worker'
-// import mocks from './mocks'
+import {entities_tests} from "./entities-mock"
+import {set_mock_worker} from './set-mock-worker'
+import mocks from './mocks'
 import NordigenProvider from '../src/nordigen-provider'
 
 
@@ -18,23 +18,25 @@ if (Fs.existsSync(__dirname + '/local-config.js')) {
     Object.assign(CONFIG, require(__dirname + '/local-config.js'))
 }
 
-// const worker = set_mock_worker(mocks)
-//
-// beforeAll(() => worker.listen())
-// afterAll(() => worker.close())
+const worker = set_mock_worker(mocks)
 
-//
-// const loads = {}
-//
-// Object.keys(entities_tests).forEach(ent_name => {
-//     const actions = entities_tests[ent_name]
-//
-//     Object.keys(actions).forEach(action_name => {
-//         if (action_name === 'load') {
-//             loads[ent_name] = actions
-//         }
-//     })
-// })
+beforeAll(() => worker.listen())
+afterAll(() => worker.close())
+
+
+const loads = {}
+
+Object.keys(entities_tests).forEach(ent_name => {
+    const actions = entities_tests[ent_name]
+
+    Object.keys(actions).forEach(action_name => {
+        if (action_name === 'load') {
+            loads[ent_name] = actions
+        }
+    })
+
+
+})
 
 const provider_options = {
     provider: {
@@ -84,3 +86,46 @@ describe('nordigen-provider', () => {
     })
 })
 
+describe("nordigen-institutions-load", () => {
+    Object.keys(loads).forEach(ent_name => {
+        let test_data = loads[ent_name]
+
+        test(`load-${ent_name}`, async () => {
+            const seneca = Seneca({legacy: false})
+                .test()
+                .use("promisify")
+                .use("entity")
+                .use("provider", provider_options)
+                .use(NordigenProvider)
+
+            const load_test_data = test_data.load
+            let res_data = await seneca.entity("provider/nordigenClient/" + ent_name).load$(load_test_data.args)
+
+            expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
+
+            const expectations = load_test_data.expectations
+
+            if (expectations) {
+                expect(expectations.id.sameAs).toEqual(res_data.id)
+                assert(expectations, res_data)
+            } else {
+                expect(res_data.id).toBeDefined()
+            }
+        })
+    })
+})
+
+function assert(expectations: any, against: any) {
+    Object.keys(expectations).forEach(field_to_assert => {
+        Object.keys(expectations[field_to_assert]).forEach(assertion => {
+            switch (assertion) {
+                case 'sameAs':
+                    expect(against[field_to_assert]).toBe(expectations[field_to_assert]['sameAs'])
+                    break
+
+                default:
+                    break
+            }
+        })
+    })
+}
