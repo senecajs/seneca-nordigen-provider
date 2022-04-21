@@ -2,7 +2,11 @@
 
 import * as Fs from 'fs'
 
+import {entities_tests} from "./entities-mock"
+import {set_mock_worker} from './set-mock-worker'
+import mocks from './mocks'
 import NordigenProvider from '../src/nordigen-provider'
+
 
 const Seneca = require('seneca')
 const SenecaMsgTest = require('seneca-msg-test')
@@ -14,26 +18,48 @@ if (Fs.existsSync(__dirname + '/local-config.js')) {
     Object.assign(CONFIG, require(__dirname + '/local-config.js'))
 }
 
+const worker = set_mock_worker(mocks)
+
+beforeAll(() => worker.listen())
+afterAll(() => worker.close())
+
+
+const loads = {}
+
+Object.keys(entities_tests).forEach(ent_name => {
+    const actions = entities_tests[ent_name]
+
+    Object.keys(actions).forEach(action_name => {
+        if (action_name === 'load') {
+            loads[ent_name] = actions
+        }
+    })
+
+
+})
+
+const provider_options = {
+    provider: {
+        nordigen: {
+            keys: {
+                secretId: {
+                    value: CONFIG.id
+                },
+                secretKey: {
+                    value: CONFIG.key
+                },
+            }
+        }
+    }
+}
+
 describe('nordigen-provider', () => {
 
     test('happy', async () => {
         const seneca = Seneca({legacy: false})
             .test()
             .use('promisify')
-            .use('provider', {
-                provider: {
-                    nordigen: {
-                        keys: {
-                            secretId: {
-                                value: CONFIG.id
-                            },
-                            secretKey: {
-                                value: CONFIG.key
-                            },
-                        }
-                    }
-                }
-            })
+            .use('provider', provider_options)
             .use(NordigenProvider)
         await seneca.ready()
     })
@@ -42,20 +68,7 @@ describe('nordigen-provider', () => {
     test('messages', async () => {
         const seneca = Seneca({legacy: false})
             .test()
-            .use('provider', {
-                provider: {
-                    nordigen: {
-                        keys: {
-                            secretId: {
-                                value: CONFIG.id
-                            },
-                            secretKey: {
-                                value: CONFIG.key
-                            },
-                        }
-                    }
-                }
-            })
+            .use('provider', provider_options)
             .use(NordigenProvider)
         await (SenecaMsgTest(seneca, NordigenProviderMessages)())
     })
@@ -64,86 +77,55 @@ describe('nordigen-provider', () => {
         const seneca = Seneca({legacy: false})
             .test()
             .use('promisify')
-            .use('provider', {
-                provider: {
-                    nordigen: {
-                        keys: {
-                            secretId: {
-                                value: CONFIG.id
-                            },
-                            secretKey: {
-                                value: CONFIG.key
-                            },
-                        }
-                    }
-                }
-            })
+            .use('provider', provider_options)
             .use(NordigenProvider)
         await seneca.ready()
 
         let native = seneca.export('NordigenProvider/native')
         expect(native().nordigenClient).toBeDefined()
     })
-
-    //
-    // test('entity-load', async () => {
-    //     const seneca = Seneca({legacy: false})
-    //         .test()
-    //         .use('promisify')
-    //         .use('entity')
-    //         .use('provider', {
-    //             provider: {
-    //                 github: {
-    //                     keys: {
-    //                         api: {
-    //                             value: CONFIG.key
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //         .use(NordigenProvider)
-    //
-    //     let repo = await seneca.entity('provider/github/repo')
-    //         .load$('senecajs/seneca')
-    //     expect(repo).toBeDefined()
-    //     expect(repo.id).toEqual('senecajs/seneca')
-    //     expect(repo.name).toEqual('seneca')
-    //     expect(repo.full_name).toEqual('senecajs/seneca')
-    // })
-    //
-    //
-    // test('entity-save', async () => {
-    //     if (CONFIG.key) {
-    //         const provider_options = {
-    //             provider: {
-    //                 github: {
-    //                     keys: {
-    //                         api: {
-    //                             value: CONFIG.key
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //
-    //         const seneca = Seneca({legacy: false})
-    //             .test()
-    //             .use('promisify')
-    //             .use('entity')
-    //             .use('provider', provider_options)
-    //             .use(NordigenProvider)
-    //
-    //         let repo = await seneca.entity('provider/github/repo')
-    //             .load$('senecajs/github-api-test')
-    //         expect(repo).toBeDefined()
-    //
-    //         repo.description = repo.description + 'M'
-    //
-    //         repo = await repo.save$()
-    //         expect(repo.description.endsWith('M')).toBeTruthy()
-    //     }
-    // })
-
 })
 
+describe("nordigen-institutions-load", () => {
+    Object.keys(loads).forEach(ent_name => {
+        let test_data = loads[ent_name]
+
+        test(`load-${ent_name}`, async () => {
+            const seneca = Seneca({legacy: false})
+                .test()
+                .use("promisify")
+                .use("entity")
+                .use("provider", provider_options)
+                .use(NordigenProvider)
+
+            const load_test_data = test_data.load
+            let res_data = await seneca.entity("provider/nordigenClient/" + ent_name).load$(load_test_data.args)
+
+            expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
+
+            const expectations = load_test_data.expectations
+
+            if (expectations) {
+                expect(expectations.id.sameAs).toEqual(res_data.id)
+                assert(expectations, res_data)
+            } else {
+                expect(res_data.id).toBeDefined()
+            }
+        })
+    })
+})
+
+function assert(expectations: any, against: any) {
+    Object.keys(expectations).forEach(field_to_assert => {
+        Object.keys(expectations[field_to_assert]).forEach(assertion => {
+            switch (assertion) {
+                case 'sameAs':
+                    expect(against[field_to_assert]).toBe(expectations[field_to_assert]['sameAs'])
+                    break
+
+                default:
+                    break
+            }
+        })
+    })
+}
