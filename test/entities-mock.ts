@@ -1,15 +1,11 @@
-import crypto from "crypto"
 import {TestEntityMap} from "./types-mock"
 
 let test_args = {
-    institution_id: "FakeBank123",
-    institution_name: 'Fake Bank'
+    institution_id: "REVOLUT_REVOGB21",
 }
 
-const rand = crypto.randomBytes(10).toString("hex")
-
 const entities_tests: TestEntityMap = {
-    institution: {
+    institutions: {
         load: {
             args: {
                 institution_id: test_args.institution_id,
@@ -17,9 +13,6 @@ const entities_tests: TestEntityMap = {
             expectations: {
                 id: {
                     sameAs: test_args.institution_id,
-                },
-                institution_name: {
-                    sameAs: test_args.institution_name
                 },
             },
         },
