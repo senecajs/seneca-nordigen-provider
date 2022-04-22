@@ -22,22 +22,18 @@ let test_args = {
 }
 
 const entities_tests: TestEntityMap = {
-    // institutions: {
-    //     load: {
-    //         args: {
-    //             institution_a: test_args.institutionA,
-    //             institution_b: test_args.institutionB,
-    //         },
-    //         expectations: {
-    //             idA: {
-    //                 sameAs: test_args.institutionA.id,
-    //             },
-    //             idB: {
-    //                 sameAs: test_args.institutionB.id,
-    //             }
-    //         },
-    //     },
-    // },
+    institutions: {
+        load: {
+            args: {
+                institution: [test_args.institutionA, test_args.institutionB],
+            },
+            expectations: {
+                institution: {
+                    sameAs: [test_args.institutionA, test_args.institutionB],
+                },
+            },
+        },
+    },
     institution: {
         load: {
             args: {
