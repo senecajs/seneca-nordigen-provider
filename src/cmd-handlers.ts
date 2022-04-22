@@ -18,18 +18,33 @@ function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk:
             perform_tasks(before, context)
         }
 
-        const mockResponse = await sdk.nordigenClient[subpath][cb_name](body)
-        let entity: Entity = this.make$(msg.ent.entity$).data$({res: mockResponse})
+        if (subpath === 'token') {
 
-        if (after) {
-            perform_tasks(after, {
-                ...context,
-                outent: entity,
-                response: mockResponse
-            })
+            const mockResponse = await sdk.nordigenClient[cb_name](body)
+            let entity: Entity = this.make$(msg.ent.entity$).data$({res: mockResponse})
+
+            if (after) {
+                perform_tasks(after, {
+                    ...context,
+                    outent: entity,
+                    response: mockResponse
+                })
+            }
+            return entity
+        } else {
+            const mockResponse = await sdk.nordigenClient[subpath][cb_name](body)
+            let entity: Entity = this.make$(msg.ent.entity$).data$({res: mockResponse})
+
+            if (after) {
+                perform_tasks(after, {
+                    ...context,
+                    outent: entity,
+                    response: mockResponse
+                })
+            }
+            return entity
         }
 
-        return entity
     }
 
     return {
