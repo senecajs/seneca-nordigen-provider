@@ -86,6 +86,34 @@ describe('nordigen-provider', () => {
     })
 })
 
+// describe("nordigen-institutions-list", () => {
+//     Object.keys(loads).forEach(ent_name => {
+//         let test_data = loads[ent_name]
+//
+//         test(`load-${ent_name}`, async () => {
+//             const seneca = Seneca({legacy: false})
+//                 .test()
+//                 .use("promisify")
+//                 .use("entity")
+//                 .use("provider", provider_options)
+//                 .use(NordigenProvider)
+//
+//             const list_test_data = test_data.list
+//             let res_data = await seneca.entity("provider/nordigenClient/" + ent_name).list$(list_test_data.args)
+//
+//             expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
+//
+//             const expectations = list_test_data.expectations
+//
+//             if (expectations) {
+//                 assert(expectations, res_data)
+//             } else {
+//                 expect(res_data.id).toBeDefined()
+//             }
+//         })
+//     })
+// })
+
 describe("nordigen-institutions-load", () => {
     Object.keys(loads).forEach(ent_name => {
         let test_data = loads[ent_name]
@@ -104,28 +132,23 @@ describe("nordigen-institutions-load", () => {
             expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
 
             const expectations = load_test_data.expectations
+            expect(expectations.institution.sameAs).toEqual(res_data.institution)
 
-            if (expectations) {
-                expect(expectations.id.sameAs).toEqual(res_data.id)
-                assert(expectations, res_data)
-            } else {
-                expect(res_data.id).toBeDefined()
-            }
         })
     })
 })
 
-function assert(expectations: any, against: any) {
-    Object.keys(expectations).forEach(field_to_assert => {
-        Object.keys(expectations[field_to_assert]).forEach(assertion => {
-            switch (assertion) {
-                case 'sameAs':
-                    expect(against[field_to_assert]).toBe(expectations[field_to_assert]['sameAs'])
-                    break
-
-                default:
-                    break
-            }
-        })
-    })
-}
+// function assert(expectations: any, against: any) {
+//     Object.keys(expectations).forEach(field_to_assert => {
+//         Object.keys(expectations[field_to_assert]).forEach(assertion => {
+//             switch (assertion) {
+//                 case 'sameAs':
+//                     expect(against[field_to_assert]).toBe(expectations[field_to_assert]['sameAs'])
+//                     break
+//
+//                 default:
+//                     break
+//             }
+//         })
+//     })
+// }
