@@ -28,6 +28,19 @@ const entities: EntityMap = {
             }
         },
     },
+    token: {
+        fields: fields.token,
+        sdk: {
+            rest: {
+                subpath: 'token',
+            }
+        },
+        actions: {
+            load: {
+                cb_name: 'generateToken',
+            }
+        },
+    },
 }
 
 export {entities}
