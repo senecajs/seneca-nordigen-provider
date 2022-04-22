@@ -104,28 +104,8 @@ describe("nordigen-institutions-load", () => {
             expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
 
             const expectations = load_test_data.expectations
+            expect(expectations.institution.sameAs).toEqual(res_data.res)
 
-            if (expectations) {
-                expect(expectations.id.sameAs).toEqual(res_data.id)
-                assert(expectations, res_data)
-            } else {
-                expect(res_data.id).toBeDefined()
-            }
         })
     })
 })
-
-function assert(expectations: any, against: any) {
-    Object.keys(expectations).forEach(field_to_assert => {
-        Object.keys(expectations[field_to_assert]).forEach(assertion => {
-            switch (assertion) {
-                case 'sameAs':
-                    expect(against[field_to_assert]).toBe(expectations[field_to_assert]['sameAs'])
-                    break
-
-                default:
-                    break
-            }
-        })
-    })
-}
