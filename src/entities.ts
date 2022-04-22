@@ -11,13 +11,30 @@ const entities: EntityMap = {
         },
         actions: {
             load: {
-                cb_name: 'getInstitutionById',
+                cb_name: 'getInstitutions',
                 after: [
                     {on: 'outent', field: 'id', set: {query: 'institution_id'}},
                     {on: 'outent', field: 'institution_id', set: {query: 'institution_id'}},
                     {on: 'outent', field: 'institution_id', set: {response: 'id'}},
                 ]
             },
+        },
+    },
+    institution: {
+        fields: fields.institution,
+        sdk: {
+            rest: {
+                subpath: 'institution',
+            }
+        },
+        actions: {
+            load: {
+                cb_name: 'getInstitutionById',
+                after: [
+                    {on: 'outent', field: 'institution', set: {query: 'institution'}},
+                    {on: 'outent', field: 'institution', set: {response: 'institution'}},
+                ]
+            }
         },
     },
     // accountMetaData: {
