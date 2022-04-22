@@ -86,7 +86,7 @@ describe('nordigen-provider', () => {
     })
 })
 
-describe("nordigen-institutions-load", () => {
+describe("nordigen-load", () => {
     Object.keys(loads).forEach(ent_name => {
         let test_data = loads[ent_name]
 
@@ -104,7 +104,7 @@ describe("nordigen-institutions-load", () => {
             expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
 
             const expectations = load_test_data.expectations
-            expect(expectations.institution.sameAs).toEqual(res_data.res)
+            expect(expectations[ent_name].sameAs).toEqual(res_data.res)
 
         })
     })
