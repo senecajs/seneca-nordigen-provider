@@ -19,15 +19,25 @@ function NordigenProvider(_options) {
     function add_actions() {
         const actions = prepare_actions(entities_1.entities);
         for (const action of actions) {
-            switch (action.pattern.cmd) {
-                case 'load':
-                    seneca.message(action.pattern, make_load(action));
-                    break;
+            if (action.pattern.name === 'token') {
+                seneca.message(action.pattern, make_load_token(action));
+            }
+            else if (action.pattern.name === 'institution' && action.pattern.cmd === 'load') {
+                seneca.message(action.pattern, make_load_institution(action));
+            }
+            else {
+                seneca.message(action.pattern, make_list_institutions(action));
             }
         }
     }
-    function make_load(action) {
-        return (0, cmd_handlers_1.make_actions)(action.sdk_params, action.action_details, sdk)['load'];
+    function make_list_institutions(action) {
+        return (0, cmd_handlers_1.institution_make_actions)(action.sdk_params, action.action_details, sdk)['list'];
+    }
+    function make_load_institution(action) {
+        return (0, cmd_handlers_1.institution_make_actions)(action.sdk_params, action.action_details, sdk)['load'];
+    }
+    function make_load_token(action) {
+        return (0, cmd_handlers_1.token_make_actions)(action.sdk_params, action.action_details, sdk)['load'];
     }
     function prepare_actions(entities) {
         const actions_data = [];
