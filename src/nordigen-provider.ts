@@ -4,7 +4,8 @@
 // TODO: namespace provider zone; needs seneca-entity feature
 
 import NordigenClient from 'nordigen-node'
-import {make_actions} from './cmd-handlers'
+import {institution_make_actions} from './cmd-handlers/institution-handlers'
+import {token_make_actions} from './cmd-handlers/token-handlers'
 import {entities} from './entities'
 import {ActionData, EntityMap} from './types'
 
@@ -26,18 +27,26 @@ function NordigenProvider(this: any, _options: any) {
 
     function add_actions() {
         const actions = prepare_actions(entities)
-
         for (const action of actions) {
-            switch (action.pattern.cmd) {
-                case 'load':
-                    seneca.message(action.pattern, make_load(action))
-                    break
+            if (action.pattern.name === 'token') {
+                seneca.message(action.pattern, make_load_token(action))
+            } else {
+                seneca.message(action.pattern, make_load_institution(action))
             }
+
         }
     }
 
-    function make_load(action: ActionData) {
-        return make_actions(
+    function make_load_institution(action: ActionData) {
+        return institution_make_actions(
+            action.sdk_params,
+            action.action_details,
+            sdk
+        )['load']
+    }
+
+    function make_load_token(action: ActionData) {
+        return token_make_actions(
             action.sdk_params,
             action.action_details,
             sdk
