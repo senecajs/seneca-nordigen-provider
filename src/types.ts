@@ -48,7 +48,7 @@ type EntityMap = {
     }
 }
 
-type EntityAction = { "load": ActionDetails }
+type EntityAction = { "list": ActionDetails } | { "load": ActionDetails }
 
 type SdkParams = {
     rest: {
