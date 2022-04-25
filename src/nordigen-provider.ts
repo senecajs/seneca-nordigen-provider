@@ -4,8 +4,7 @@
 // TODO: namespace provider zone; needs seneca-entity feature
 
 import NordigenClient from 'nordigen-node'
-import {institution_make_actions} from './cmd-handlers/institution-handlers'
-import {token_make_actions} from './cmd-handlers/token-handlers'
+import {institution_make_actions, token_make_actions} from './cmd-handlers'
 import {entities} from './entities'
 import {ActionData, EntityMap} from './types'
 
