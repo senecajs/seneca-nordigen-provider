@@ -71,9 +71,9 @@ describe('nordigen-provider', () => {
     })
 })
 
-describe("institutions", () => {
+describe("institution", () => {
 
-    test(`list institutions`, async () => {
+    test(`list institution`, async () => {
         const seneca = Seneca({legacy: false})
             .test()
             .use("promisify")
@@ -81,13 +81,13 @@ describe("institutions", () => {
             .use("provider", provider_options)
             .use(NordigenProvider)
 
-        const list_test_data = entities_tests.institutions.list
-        let res_data = await seneca.entity("provider/nordigenClient/institutions").list$(list_test_data.args)
+        const list_test_data = entities_tests.institution.list
+        let res_data = await seneca.entity("provider/nordigenClient/institution").list$(list_test_data.args)
 
-        expect(res_data.entity$).toBe("provider/nordigenClient/institutions")
+        expect(res_data.entity$).toBe("provider/nordigenClient/institution")
 
         const expectations = list_test_data.expectations
-        expect(expectations.institutions.sameAs).toEqual(res_data.res)
+        expect(expectations.institution.sameAs).toEqual(res_data.res)
     })
 
     test('load institution', async () => {
@@ -98,10 +98,10 @@ describe("institutions", () => {
             .use("provider", provider_options)
             .use(NordigenProvider)
 
-        const load_test_data = entities_tests.institutions.load
-        let res_data = await seneca.entity("provider/nordigenClient/institutions").load$(load_test_data.args)
+        const load_test_data = entities_tests.institution.load
+        let res_data = await seneca.entity("provider/nordigenClient/institution").load$(load_test_data.args)
 
-        expect(res_data.entity$).toBe("provider/nordigenClient/institutions")
+        expect(res_data.entity$).toBe("provider/nordigenClient/institution")
 
         const expectations = load_test_data.expectations
         expect(expectations.institution.sameAs).toEqual(res_data.res)

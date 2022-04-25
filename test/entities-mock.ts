@@ -40,13 +40,13 @@ const entities_tests: TestEntityMap = {
             },
         }
     },
-    institutions: {
+    institution: {
         list: {
             args: {
-                institutions: [test_args.institutionA, test_args.institutionB],
+                institution: [test_args.institutionA, test_args.institutionB],
             },
             expectations: {
-                institutions: {
+                institution: {
                     sameAs: [test_args.institutionA, test_args.institutionB],
                 },
             },
