@@ -41,7 +41,7 @@ const entities_tests: TestEntityMap = {
         }
     },
     institutions: {
-        load: {
+        list: {
             args: {
                 institutions: [test_args.institutionA, test_args.institutionB],
             },
