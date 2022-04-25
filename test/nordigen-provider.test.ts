@@ -24,14 +24,17 @@ beforeAll(() => worker.listen())
 afterAll(() => worker.close())
 
 
-const loads = {}
+const loadInstitutions = {}
+const loadToken = {}
 
 Object.keys(entities_tests).forEach(ent_name => {
     const actions = entities_tests[ent_name]
 
     Object.keys(actions).forEach(action_name => {
         if (action_name === 'load') {
-            loads[ent_name] = actions
+            loadInstitutions[ent_name] = actions
+        } else if (action_name === 'loadToken') {
+            loadToken[ent_name] = actions
         }
     })
 
@@ -87,8 +90,8 @@ describe('nordigen-provider', () => {
 })
 
 describe("nordigen-load", () => {
-    Object.keys(loads).forEach(ent_name => {
-        let test_data = loads[ent_name]
+    Object.keys(loadInstitutions).forEach(ent_name => {
+        let test_data = loadInstitutions[ent_name]
 
         test(`load-${ent_name}`, async () => {
             const seneca = Seneca({legacy: false})
@@ -105,6 +108,29 @@ describe("nordigen-load", () => {
 
             const expectations = load_test_data.expectations
             expect(expectations[ent_name].sameAs).toEqual(res_data.res)
+
+        })
+    })
+})
+
+describe("nordigen load token", () => {
+    Object.keys(loadToken).forEach(ent_name => {
+        let test_data = loadToken[ent_name]
+
+        test('load token', async () => {
+            const seneca = Seneca({legacy: false})
+                .test()
+                .use("promisify")
+                .use("entity")
+                .use("provider", provider_options)
+                .use(NordigenProvider)
+
+            const load_test_data = test_data.loadToken
+            let res_data = await seneca.entity("provider/nordigenClient/" + ent_name).load$(load_test_data.args)
+            expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
+
+            const expectations = load_test_data.expectations
+            expect(expectations[ent_name].sameAs).toEqual(res_data.token)
 
         })
     })
