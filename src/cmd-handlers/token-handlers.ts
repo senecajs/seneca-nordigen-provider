@@ -18,7 +18,6 @@ function token_make_actions(sdk_params: SdkParams, action_details: ActionDetails
         }
 
         const apiResponse = await sdk.nordigenClient[cb_name](body)
-
         let entity: Entity = this.make$(msg.ent.entity$).data$({res: apiResponse})
 
         if (after) {
@@ -29,8 +28,6 @@ function token_make_actions(sdk_params: SdkParams, action_details: ActionDetails
             })
         }
         return entity
-
-
     }
 
     return {
