@@ -10,7 +10,7 @@ const entities: EntityMap = {
             }
         },
         actions: {
-            load: {
+            list: {
                 cb_name: 'getInstitutions',
             },
         },
