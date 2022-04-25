@@ -18,14 +18,14 @@ function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk:
             perform_tasks(before, context)
         }
 
-        const ApiResponse = await sdk.nordigenClient[subpath][cb_name](body)
-        let entity: Entity = this.make$(msg.ent.entity$).data$({res: ApiResponse})
+        const apiResponse = await sdk.nordigenClient[subpath][cb_name](body)
+        let entity: Entity = this.make$(msg.ent.entity$).data$({res: apiResponse})
 
         if (after) {
             perform_tasks(after, {
                 ...context,
                 outent: entity,
-                response: ApiResponse
+                response: apiResponse
             })
         }
 
