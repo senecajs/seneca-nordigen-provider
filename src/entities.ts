@@ -2,7 +2,7 @@ import {EntityMap} from './types'
 import fields from './fields'
 
 const entities: EntityMap = {
-    institutions: {
+    institution: {
         fields: fields.institution,
         sdk: {
             rest: {

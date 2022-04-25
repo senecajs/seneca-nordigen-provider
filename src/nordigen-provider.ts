@@ -29,7 +29,7 @@ function NordigenProvider(this: any, _options: any) {
         for (const action of actions) {
             if (action.pattern.name === 'token') {
                 seneca.message(action.pattern, make_load_token(action))
-            } else if (action.pattern.name === 'institution' && action.pattern.cmd === 'load') {
+            } else if (action.pattern.cmd === 'load') {
                 seneca.message(action.pattern, make_load_institution(action))
             } else {
                 seneca.message(action.pattern, make_list_institutions(action))
