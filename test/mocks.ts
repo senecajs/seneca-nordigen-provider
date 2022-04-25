@@ -1,4 +1,16 @@
 export default {
+    token: {
+        post: {
+            method: "POST",
+            url: "/token/new/",
+            mock_data: {
+                access: "123ABC",
+                access_expires: 86400,
+                refresh: "456DEF",
+                refresh_expires: 2592000,
+            },
+        },
+    },
     institution: {
         get: {
             method: "GET",

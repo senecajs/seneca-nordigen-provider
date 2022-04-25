@@ -1,4 +1,4 @@
-type EntityActionTest = { load: ActionTest }
+type EntityActionTest = { list: ActionTest } | { load: ActionTest }
 
 type TestEntityMap = {
     [name: string]: EntityActionTest

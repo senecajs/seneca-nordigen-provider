@@ -1,6 +1,12 @@
 import {TestEntityMap} from "./types-mock"
 
 let test_args = {
+    token: {
+        access: "123ABC",
+        access_expires: 86400,
+        refresh: "456DEF",
+        refresh_expires: 2592000
+    },
     institutionA: {
         id: "FakeBank123A",
         name: "Fake Bank A",
@@ -22,19 +28,29 @@ let test_args = {
 }
 
 const entities_tests: TestEntityMap = {
-    institutions: {
+    token: {
         load: {
             args: {
-                institution: [test_args.institutionA, test_args.institutionB],
+                token: test_args.token,
             },
             expectations: {
-                institution: {
+                token: {
+                    sameAs: test_args.token,
+                },
+            },
+        }
+    },
+    institutions: {
+        list: {
+            args: {
+                institutions: [test_args.institutionA, test_args.institutionB],
+            },
+            expectations: {
+                institutions: {
                     sameAs: [test_args.institutionA, test_args.institutionB],
                 },
             },
         },
-    },
-    institution: {
         load: {
             args: {
                 institution: test_args.institutionA,

@@ -7,4 +7,10 @@ export default {
         countries: {},
         logo: {}
     },
+    token: {
+        access: {},
+        access_expires: {},
+        refresh: {},
+        refresh_expires: {},
+    },
 }

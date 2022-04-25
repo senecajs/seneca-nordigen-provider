@@ -10,21 +10,24 @@ const entities: EntityMap = {
             }
         },
         actions: {
-            load: {
+            list: {
                 cb_name: 'getInstitutions',
             },
+            load: {
+                cb_name: 'getInstitutionById',
+            }
         },
     },
-    institution: {
-        fields: fields.institution,
+    token: {
+        fields: fields.token,
         sdk: {
             rest: {
-                subpath: 'institution',
+                subpath: 'token',
             }
         },
         actions: {
             load: {
-                cb_name: 'getInstitutionById',
+                cb_name: 'generateToken',
             }
         },
     },

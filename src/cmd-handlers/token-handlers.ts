@@ -1,8 +1,7 @@
-import {Entity, ActionDetails, SdkParams} from "./types"
-import {perform_tasks} from "./utils"
+import {Entity, ActionDetails, SdkParams} from "../types"
+import {perform_tasks} from "../utils"
 
-function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk: Record<string, any>) {
-    const {subpath} = sdk_params.rest
+function token_make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk: Record<string, any>) {
     const {before, after, cb_name} = action_details
 
     async function load(this: any, msg: any) {
@@ -18,7 +17,7 @@ function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk:
             perform_tasks(before, context)
         }
 
-        const apiResponse = await sdk.nordigenClient[subpath][cb_name](body)
+        const apiResponse = await sdk.nordigenClient[cb_name](body)
         let entity: Entity = this.make$(msg.ent.entity$).data$({res: apiResponse})
 
         if (after) {
@@ -28,7 +27,6 @@ function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk:
                 response: apiResponse
             })
         }
-
         return entity
     }
 
@@ -38,4 +36,4 @@ function make_actions(sdk_params: SdkParams, action_details: ActionDetails, sdk:
 }
 
 
-export {make_actions}
+export {token_make_actions}

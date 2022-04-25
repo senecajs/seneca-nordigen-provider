@@ -48,7 +48,7 @@ type EntityMap = {
     }
 }
 
-type EntityAction = { "load": ActionDetails }
+type EntityAction = { "list": ActionDetails } | { "load": ActionDetails }
 
 type SdkParams = {
     rest: {
@@ -61,6 +61,7 @@ type NordigenRestEndpoints =
     | "agreement"
     | "institution"
     | "requisition"
+    | "token"
 
 
 export type {ActionType, ActionDetails, EntityMap, Entity, ActionData, SdkParams, Task, Context, TasksTypesFn}
