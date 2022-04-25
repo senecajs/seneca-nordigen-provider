@@ -13,16 +13,6 @@ const entities: EntityMap = {
             list: {
                 cb_name: 'getInstitutions',
             },
-        },
-    },
-    institution: {
-        fields: fields.institution,
-        sdk: {
-            rest: {
-                subpath: 'institution',
-            }
-        },
-        actions: {
             load: {
                 cb_name: 'getInstitutionById',
             }
