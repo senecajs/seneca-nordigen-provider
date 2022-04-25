@@ -51,8 +51,6 @@ const entities_tests: TestEntityMap = {
                 },
             },
         },
-    },
-    institution: {
         load: {
             args: {
                 institution: test_args.institutionA,
