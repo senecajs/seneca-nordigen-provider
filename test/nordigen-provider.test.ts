@@ -24,6 +24,7 @@ beforeAll(() => worker.listen())
 afterAll(() => worker.close())
 
 
+const listInstitutions = {}
 const loadInstitutions = {}
 const loadToken = {}
 
@@ -35,6 +36,8 @@ Object.keys(entities_tests).forEach(ent_name => {
             loadInstitutions[ent_name] = actions
         } else if (action_name === 'loadToken') {
             loadToken[ent_name] = actions
+        } else {
+            listInstitutions[ent_name] = actions
         }
     })
 
@@ -89,7 +92,31 @@ describe('nordigen-provider', () => {
     })
 })
 
-describe("nordigen-load", () => {
+describe("nordigen institutions list", () => {
+    Object.keys(listInstitutions).forEach(ent_name => {
+        let test_data = listInstitutions[ent_name]
+
+        test(`list institutions`, async () => {
+            const seneca = Seneca({legacy: false})
+                .test()
+                .use("promisify")
+                .use("entity")
+                .use("provider", provider_options)
+                .use(NordigenProvider)
+
+            const list_test_data = test_data.list
+            let res_data = await seneca.entity("provider/nordigenClient/" + ent_name).list$(list_test_data.args)
+
+            expect(res_data.entity$).toBe("provider/nordigenClient/" + ent_name)
+
+            const expectations = list_test_data.expectations
+            expect(expectations[ent_name].sameAs).toEqual(res_data.res)
+
+        })
+    })
+})
+
+describe("nordigen institution load", () => {
     Object.keys(loadInstitutions).forEach(ent_name => {
         let test_data = loadInstitutions[ent_name]
 
