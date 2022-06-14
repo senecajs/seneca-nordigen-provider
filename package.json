@@ -1,6 +1,6 @@
 {
   "name": "@seneca/nordigen-provider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/nordigen-provider.js",
   "type": "commonjs",
   "types": "dist/nordigen-provider.d.ts",
@@ -32,6 +32,7 @@
   "license": "MIT",
   "files": [
     "dist",
+    "nordigen-loader.js",
     "src/**/*.ts",
     "LICENSE"
   ],
