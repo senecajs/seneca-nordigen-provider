@@ -1,127 +1,76 @@
-/* Copyright © 2021 Seneca Project Contributors, MIT License. */
+/* Copyright © 2022 Seneca Project Contributors, MIT License. */
 
 import * as Fs from 'fs'
 
-import {entities_tests} from "./entities-mock"
-import {set_mock_worker} from './set-mock-worker'
-import mocks from './mocks'
+import Seneca from 'seneca'
+import SenecaMsgTest from 'seneca-msg-test'
+
+
 import NordigenProvider from '../src/nordigen-provider'
+import NordigenProviderDoc from '../src/NordigenProvider-doc'
+
+const BasicMessages = require('./basic.messages.js')
 
 
-const Seneca = require('seneca')
-const SenecaMsgTest = require('seneca-msg-test')
-const NordigenProviderMessages = require('./nordigen-provider.messages').default
-
+// Don't run any tests requiring keys with Github Actions.
 const CONFIG: any = {}
 
 if (Fs.existsSync(__dirname + '/local-config.js')) {
-    Object.assign(CONFIG, require(__dirname + '/local-config.js'))
+  Object.assign(CONFIG, require(__dirname + '/local-config.js'))
 }
 
-const worker = set_mock_worker(mocks)
-
-beforeAll(() => worker.listen())
-afterAll(() => worker.close())
 
 const provider_options = {
-    provider: {
-        nordigen: {
-            keys: {
-                secretId: {
-                    value: CONFIG.id
-                },
-                secretKey: {
-                    value: CONFIG.key
-                },
-            }
-        }
-    }
+  provider: {
+    nordigen: CONFIG
+  }
 }
+
 
 describe('nordigen-provider', () => {
 
-    test('happy', async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use('promisify')
-            .use('provider', provider_options)
-            .use(NordigenProvider)
-        await seneca.ready()
+  test('happy', async () => {
+    expect(NordigenProvider).toBeDefined()
+    expect(NordigenProviderDoc).toBeDefined()
+
+    const seneca = await makeSeneca()
+    let sdk = seneca.export('NordigenProvider/sdk')()
+    expect(sdk.baseUrl).toEqual('https://ob.nordigen.com/api/v2')
+
+    expect(await seneca.post('sys:provider,provider:nordigen,get:info'))
+      .toMatchObject({
+        ok: true,
+        name: 'nordigen',
+      })
+  })
+
+
+  test('messages', async () => {
+    const seneca = await makeSeneca()
+    await (SenecaMsgTest(seneca, BasicMessages)())
+  })
+
+
+  test('institution-list', async () => {
+    if (!CONFIG.keys) return;
+
+    const seneca = await makeSeneca()
+    const list = await seneca.entity("provider/nordigen/institution").list$({
+      country: 'IE'
     })
+    expect(list.length > 0).toBeTruthy()
+  })
 
-
-    test('messages', async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use('provider', provider_options)
-            .use(NordigenProvider)
-        await (SenecaMsgTest(seneca, NordigenProviderMessages)())
-    })
-
-    test('native', async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use('promisify')
-            .use('provider', provider_options)
-            .use(NordigenProvider)
-        await seneca.ready()
-
-        let native = seneca.export('NordigenProvider/native')
-        expect(native().nordigenClient).toBeDefined()
-    })
 })
 
-describe("institution", () => {
 
-    test(`list institution`, async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use("promisify")
-            .use("entity")
-            .use("provider", provider_options)
-            .use(NordigenProvider)
+async function makeSeneca() {
+  const seneca = Seneca({ legacy: false })
+    .test()
+    .use('promisify')
+    .use('entity')
+    .use('provider', provider_options)
+    .use(NordigenProvider)
+  return seneca.ready()
+}
 
-        const list_test_data = entities_tests.institution.list
-        let res_data = await seneca.entity("provider/nordigenClient/institution").list$(list_test_data.args)
-
-        expect(res_data.entity$).toBe("provider/nordigenClient/institution")
-
-        const expectations = list_test_data.expectations
-        expect(expectations.institution.sameAs).toEqual(res_data.res)
-    })
-
-    test('load institution', async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use("promisify")
-            .use("entity")
-            .use("provider", provider_options)
-            .use(NordigenProvider)
-
-        const load_test_data = entities_tests.institution.load
-        let res_data = await seneca.entity("provider/nordigenClient/institution").load$(load_test_data.args)
-
-        expect(res_data.entity$).toBe("provider/nordigenClient/institution")
-
-        const expectations = load_test_data.expectations
-        expect(expectations.institution.sameAs).toEqual(res_data.res)
-    })
-})
-
-describe("token", () => {
-    test('load token', async () => {
-        const seneca = Seneca({legacy: false})
-            .test()
-            .use("promisify")
-            .use("entity")
-            .use("provider", provider_options)
-            .use(NordigenProvider)
-
-        const load_test_data = entities_tests.token.load
-        let res_data = await seneca.entity("provider/nordigenClient/token").load$(load_test_data.args)
-        expect(res_data.entity$).toBe("provider/nordigenClient/token")
-
-        const expectations = load_test_data.expectations
-        expect(expectations.token.sameAs).toEqual(res_data.res)
-    })
-})

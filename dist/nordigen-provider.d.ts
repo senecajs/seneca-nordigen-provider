@@ -1,8 +1,7 @@
-declare function NordigenProvider(this: any, _options: any): {
+declare type NordigenProviderOptions = {};
+declare function NordigenProvider(this: any, options: NordigenProviderOptions): {
     exports: {
-        native: () => {
-            nordigenClient: any;
-        };
+        sdk: () => any;
     };
 };
 export default NordigenProvider;

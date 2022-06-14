@@ -1,88 +1,64 @@
 "use strict";
-/* Copyright © 2021 Seneca Project Contributors, MIT License. */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+/* Copyright © 2022 Seneca Project Contributors, MIT License. */
 Object.defineProperty(exports, "__esModule", { value: true });
-// TODO: namespace provider zone; needs seneca-entity feature
-const nordigen_node_1 = __importDefault(require("nordigen-node"));
-const cmd_handlers_1 = require("./cmd-handlers");
-const entities_1 = require("./entities");
-function NordigenProvider(_options) {
+const Pkg = require('../package.json');
+const { NordigenLoader } = require('../nordigen-loader.js');
+function NordigenProvider(options) {
     const seneca = this;
-    const ZONE_BASE = 'provider/nordigen/';
-    let sdk = { nordigenClient: undefined };
-    // NOTE: sys- zone prefix is reserved.
-    add_actions();
+    const entityBuilder = this.export('provider/entityBuilder');
     seneca
         .message('sys:provider,provider:nordigen,get:info', get_info);
-    function add_actions() {
-        const actions = prepare_actions(entities_1.entities);
-        for (const action of actions) {
-            if (action.pattern.name === 'token') {
-                seneca.message(action.pattern, make_load_token(action));
-            }
-            else if (action.pattern.cmd === 'load') {
-                seneca.message(action.pattern, make_load_institution(action));
-            }
-            else {
-                seneca.message(action.pattern, make_list_institutions(action));
-            }
-        }
-    }
-    function make_list_institutions(action) {
-        return (0, cmd_handlers_1.institution_make_actions)(action.sdk_params, action.action_details, sdk)['list'];
-    }
-    function make_load_institution(action) {
-        return (0, cmd_handlers_1.institution_make_actions)(action.sdk_params, action.action_details, sdk)['load'];
-    }
-    function make_load_token(action) {
-        return (0, cmd_handlers_1.token_make_actions)(action.sdk_params, action.action_details, sdk)['load'];
-    }
-    function prepare_actions(entities) {
-        const actions_data = [];
-        for (const [ent_name, data] of Object.entries(entities)) {
-            const { actions } = data;
-            data.name = ent_name;
-            for (const [action_name, action_details] of Object.entries(actions)) {
-                const pattern = {
-                    name: ent_name,
-                    cmd: action_name,
-                    zone: 'provider',
-                    base: 'nordigenClient',
-                    role: 'entity',
-                };
-                actions_data.push({
-                    pattern,
-                    sdk_params: data.sdk,
-                    action_details,
-                });
-            }
-        }
-        return actions_data;
-    }
     async function get_info(_msg) {
         return {
             ok: true,
             name: 'nordigen',
-            details: {
-                sdk: 'nordigenClient'
+            version: Pkg.version,
+            sdk: {
+                name: 'nordigen-node',
+                version: Pkg.dependencies['nordigen-node'],
+                baseUrl: this.shared.sdk?.baseUrl,
             }
         };
     }
+    entityBuilder(this, {
+        provider: {
+            name: 'nordigen'
+        },
+        entity: {
+            institution: {
+                cmd: {
+                    list: {
+                        action: async function (entize, msg) {
+                            if (null == msg.q?.country) {
+                                return seneca.fail('no-country');
+                            }
+                            let res = await this.shared.sdk.institution.getInstitutions({
+                                country: msg.q.country
+                            });
+                            let list = res.map((data) => entize(data));
+                            return list;
+                        }
+                    }
+                }
+            }
+        }
+    });
     seneca.prepare(async function () {
+        const NordigenModule = await NordigenLoader;
+        const Nordigen = NordigenModule.default;
+        // TODO: define get:keys to get all the keys?
         let secretId = await this.post('sys:provider,get:key,provider:nordigen,key:secretId');
         let secretKey = await this.post('sys:provider,get:key,provider:nordigen,key:secretKey');
-        if (!secretId.value || !secretKey.value) {
-            this.fail('secretId or secretKey missing');
-        }
-        sdk.nordigenClient = new nordigen_node_1.default({ secretId: secretId.value, secretKey: secretKey.value });
+        let config = {
+            secretId: secretId.value,
+            secretKey: secretKey.value
+        };
+        this.shared.sdk = new Nordigen(config);
+        await this.shared.sdk.generateToken();
     });
     return {
         exports: {
-            native: () => ({
-                nordigenClient: sdk.nordigenClient
-            })
+            sdk: () => this.shared.sdk
         }
     };
 }

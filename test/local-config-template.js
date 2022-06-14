@@ -1,4 +1,6 @@
 module.exports = {
-  id: '<API-ID>',
-  key: '<API-KEY>',
+  keys: {
+    secretId: { value: '<API-ID>' },
+    secretKey: { value: '<API-KEY>' },
+  }
 }

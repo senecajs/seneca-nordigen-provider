@@ -127,3 +127,15 @@ Get information about the provider.
 
 
 <!--END:action-desc-->
+
+
+
+
+## Testing
+
+Note that since full tests can only bve run locally with valid API
+keys, coverage is not generate by Github Actions, and the local
+coverage is checked into git.
+
+
+
