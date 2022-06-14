@@ -13,7 +13,13 @@ const BasicMessages = require('./basic.messages.js')
 
 
 // Don't run any tests requiring keys with Github Actions.
-const CONFIG: any = {}
+const CONFIG: any = {
+  live$: false,
+  keys: {
+    secretId: { value: '<API-ID>' },
+    secretKey: { value: '<API-KEY>' },
+  }
+}
 
 if (Fs.existsSync(__dirname + '/local-config.js')) {
   Object.assign(CONFIG, require(__dirname + '/local-config.js'))
@@ -52,7 +58,7 @@ describe('nordigen-provider', () => {
 
 
   test('institution-list', async () => {
-    if (!CONFIG.keys) return;
+    if (false === CONFIG.live$) return;
 
     const seneca = await makeSeneca()
     const list = await seneca.entity("provider/nordigen/institution").list$({
