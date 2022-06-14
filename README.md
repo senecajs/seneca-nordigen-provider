@@ -9,11 +9,11 @@ that they can be accessed using the Seneca entity API and messages.
 
 
 [![npm version](https://img.shields.io/npm/v/@seneca/nordigen-provider.svg)](https://npmjs.com/package/@seneca/nordigen-provider)
-[![build](https://nordigen.com/senecajs/seneca-nordigen-provider/actions/workflows/build.yml/badge.svg)](https://nordigen.com/senecajs/seneca-nordigen-provider/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/nordigen/senecajs/seneca-nordigen-provider/badge.svg?branch=main)](https://coveralls.io/nordigen/senecajs/seneca-nordigen-provider?branch=main)
-[![Known Vulnerabilities](https://snyk.io/test/nordigen/senecajs/seneca-nordigen-provider/badge.svg)](https://snyk.io/test/nordigen/senecajs/seneca-nordigen-provider)
-[![DeepScan grade](https://deepscan.io/api/teams/5016/projects/19462/branches/505954/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5016&pid=19462&bid=505954)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f76e83896b731bb5d609/maintainability)](https://codeclimate.com/nordigen/senecajs/seneca-nordigen-provider/maintainability)
+[![build](https://github.com/senecajs/seneca-nordigen-provider/actions/workflows/build.yml/badge.svg)](https://nordigen.com/senecajs/seneca-nordigen-provider/actions/workflows/build.yml)
+[![Coverage Status](https://coveralls.io/repos/senecajs/seneca-nordigen-provider/badge.svg?branch=main)](https://coveralls.io/senecajs/seneca-nordigen-provider?branch=main)
+[![Known Vulnerabilities](https://snyk.io/test/senecajs/seneca-nordigen-provider/badge.svg)](https://snyk.io/test/senecajs/seneca-nordigen-provider)
+[![DeepScan grade](https://deepscan.io/api/teams/5016/projects/21342/branches/611017/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5016&pid=21342&bid=611017)
+[![Maintainability](https://api.codeclimate.com/v1/badges/08fb814c5070ad97330d/maintainability)](https://codeclimate.com/github/senecajs/seneca-nordigen-provider/maintainability)
 
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
