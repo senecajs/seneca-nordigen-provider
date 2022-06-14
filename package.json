@@ -35,13 +35,14 @@
     "LICENSE"
   ],
   "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@seneca/doc": "^4.0.1",
     "@seneca/provider": "^0.2.0",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.12",
-    "esbuild": "^0.14.3",
-    "esbuild-jest": "^0.5.0",
     "jest": "^27.4.4",
+    "msw": "^0.39.2",
     "seneca": ">=3",
     "seneca-entity": "^16.0.3",
     "seneca-msg-test": "^3.2.0",
@@ -53,6 +54,6 @@
     "seneca-promisify": ">=2"
   },
   "dependencies": {
-    "@octokit/rest": "^18.12.0"
+    "nordigen-node": "^1.0.1"
   }
 }
