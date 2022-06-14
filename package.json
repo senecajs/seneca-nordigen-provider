@@ -1,6 +1,6 @@
 {
   "name": "@seneca/nordigen-provider",
-  "version": "0.2.0",
+  "version": "0.1.1",
   "main": "dist/nordigen-provider.js",
   "type": "commonjs",
   "types": "dist/nordigen-provider.d.ts",
@@ -22,7 +22,7 @@
     "test-watch": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --watchAll",
     "watch": "tsc -w -d",
     "build": "tsc -d",
-    "doc": "seneca-doc",
+    "doc": "echo seneca-doc -p @seneca/provider FIX-broken",
     "clean": "rm -rf node_modules yarn.lock package-lock.json",
     "reset": "npm run clean && npm i && npm test",
     "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
