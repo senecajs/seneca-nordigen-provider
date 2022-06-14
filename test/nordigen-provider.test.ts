@@ -23,6 +23,7 @@ const CONFIG: any = {
 
 if (Fs.existsSync(__dirname + '/local-config.js')) {
   Object.assign(CONFIG, require(__dirname + '/local-config.js'))
+  CONFIG.live$ = true
 }
 
 
