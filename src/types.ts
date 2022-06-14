@@ -22,7 +22,7 @@ type TasksTypesFn = {
   set: (task: Task, context: Context) => void
 }
 
-type ActionType = "load" | "save"
+type ActionType = "load"
 
 type ActionDetails = {
   cb_name: string
@@ -40,7 +40,7 @@ type ActionData = {
 type Entity = { [key: string]: any }
 
 type EntityMap = {
-  [name: string] : {
+  [name: string]: {
     name?: string
     fields: { [entity: string]: Record<string, Record<string, any>> }
     sdk: SdkParams
@@ -48,32 +48,21 @@ type EntityMap = {
   }
 }
 
-type EntityAction = {
-  "load": ActionDetails
-} | {
-  "save": ActionDetails
-}
+type EntityAction = { "list": ActionDetails } | { "load": ActionDetails }
 
 type SdkParams = {
   rest: {
-    subpath: GithubRestEndpoints
+    subpath: NordigenRestEndpoints
   }
 }
 
-type GithubRestEndpoints =
-  | "repos"
-  | "checks"
-  | "codesOfConduct"
-  | "codeScanning"
-  | "git"
-  | "gists"
-  | "issues"
-  | "licenses"
-  | "orgs"
-  | "projects"
-  | "pulls"
-  | "secretScanning"
-  | "teams"
-  | "users"
+type NordigenRestEndpoints =
+  | "account"
+  | "agreement"
+  | "institution"
+  | "requisition"
+  | "token"
+
 
 export type { ActionType, ActionDetails, EntityMap, Entity, ActionData, SdkParams, Task, Context, TasksTypesFn }
+
