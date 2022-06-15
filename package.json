@@ -1,6 +1,6 @@
 {
   "name": "@seneca/nordigen-provider",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "main": "dist/nordigen-provider.js",
   "type": "commonjs",
   "types": "dist/nordigen-provider.d.ts",
