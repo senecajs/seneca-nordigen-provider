@@ -43,11 +43,18 @@ function NordigenProvider(this: any, options: NordigenProviderOptions) {
               if (null == msg.q?.country) {
                 return seneca.fail('no-country')
               }
-              let res = await this.shared.sdk.institution.getInstitutions({
+              let q = {
                 country: msg.q.country
-              })
-              let list = res.map((data: any) => entize(data))
-              return list
+              }
+              let res = await this.shared.sdk.institution.getInstitutions(q)
+
+              if (res.status_code) {
+                seneca.fail('nordigen-api-fail', { section: 'institution', q })
+              }
+              else {
+                let list = res.map((data: any) => entize(data))
+                return list
+              }
             }
           }
         }

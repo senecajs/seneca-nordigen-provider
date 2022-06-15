@@ -1,16 +1,26 @@
 
 const Seneca = require('seneca')
 
-const Config = require('./local-config')
-console.log(Config)
-
 Seneca({ legacy: false })
   .test()
   .use('promisify')
   .use('entity')
+  .use('env', {
+    debug: true,
+    file: [__dirname + '/local-config.js;?'],
+    var: {
+      NORDIGEN_SECRET_ID: String,
+      $NORDIGEN_SECRET_KEY: String,
+    }
+  })
   .use('provider', {
     provider: {
-      nordigen: Config
+      nordigen: {
+        keys: {
+          secretId: { value: '$NORDIGEN_SECRET_ID' },
+          secretKey: { value: '$NORDIGEN_SECRET_KEY' },
+        }
+      }
     }
   })
   .use('../')

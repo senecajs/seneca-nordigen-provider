@@ -65,6 +65,9 @@ describe('nordigen-provider', () => {
     const list = await seneca.entity("provider/nordigen/institution").list$({
       country: 'IE'
     })
+
+    // console.log(list)
+
     expect(list.length > 0).toBeTruthy()
   })
 
@@ -76,7 +79,24 @@ async function makeSeneca() {
     .test()
     .use('promisify')
     .use('entity')
-    .use('provider', provider_options)
+    .use('env', {
+      // debug: true,
+      file: [__dirname + '/local-config.js;?'],
+      var: {
+        NORDIGEN_SECRET_ID: String,
+        $NORDIGEN_SECRET_KEY: String,
+      }
+    })
+    .use('provider', {
+      provider: {
+        nordigen: {
+          keys: {
+            secretId: { value: '$NORDIGEN_SECRET_ID' },
+            secretKey: { value: '$NORDIGEN_SECRET_KEY' },
+          }
+        }
+      }
+    })
     .use(NordigenProvider)
   return seneca.ready()
 }
