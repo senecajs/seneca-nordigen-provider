@@ -27,12 +27,6 @@ if (Fs.existsSync(__dirname + '/local-config.js')) {
 }
 
 
-const provider_options = {
-  provider: {
-    nordigen: CONFIG
-  }
-}
-
 
 describe('nordigen-provider', () => {
 
