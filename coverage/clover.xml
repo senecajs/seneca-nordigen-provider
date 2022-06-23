@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1655979205472" clover="3.2.0">
-  <project timestamp="1655979205472" name="All files">
+<coverage generated="1656002791228" clover="3.2.0">
+  <project timestamp="1656002791228" name="All files">
     <metrics statements="143" coveredstatements="137" conditionals="10" coveredconditionals="6" methods="6" coveredmethods="4" elements="159" coveredelements="147" complexity="0" loc="143" ncloc="143" packages="1" files="2" classes="2"/>
     <file name="NordigenProvider-doc.ts" path="/Users/richard/Projects/seneca/nordigen-provider/src/NordigenProvider-doc.ts">
       <metrics statements="15" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
