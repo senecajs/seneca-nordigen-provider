@@ -5,7 +5,7 @@
   "type": "commonjs",
   "types": "dist/nordigen-provider.d.ts",
   "description": "Handle incoming messages within other frameworks.",
-  "homepage": "https://nordigen.com/senecajs/seneca-nordigen-provider",
+  "homepage": "https://github.com/senecajs/seneca-nordigen-provider",
   "keywords": [
     "seneca",
     "nordigen-provider"
@@ -13,7 +13,7 @@
   "author": "Richard Rodger - richardrodger.com",
   "repository": {
     "type": "git",
-    "url": "git://nordigen.com/senecajs/seneca-nordigen-provider.git"
+    "url": "git://github.com/senecajs/seneca-nordigen-provider.git"
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
