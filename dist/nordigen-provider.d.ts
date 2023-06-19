@@ -1,4 +1,4 @@
-declare type NordigenProviderOptions = {};
+type NordigenProviderOptions = {};
 declare function NordigenProvider(this: any, options: NordigenProviderOptions): {
     exports: {
         sdk: () => any;
