@@ -1,5 +1,5 @@
 "use strict";
-/* Copyright © 2022 Seneca Project Contributors, MIT License. */
+/* Copyright © 2022-2023 Seneca Project Contributors, MIT License. */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pkg = require('../package.json');
 const { NordigenLoader } = require('../nordigen-loader.js');
@@ -9,6 +9,7 @@ function NordigenProvider(options) {
     seneca
         .message('sys:provider,provider:nordigen,get:info', get_info);
     async function get_info(_msg) {
+        var _a;
         return {
             ok: true,
             name: 'nordigen',
@@ -16,7 +17,7 @@ function NordigenProvider(options) {
             sdk: {
                 name: 'nordigen-node',
                 version: Pkg.dependencies['nordigen-node'],
-                baseUrl: this.shared.sdk?.baseUrl,
+                baseUrl: (_a = this.shared.sdk) === null || _a === void 0 ? void 0 : _a.baseUrl,
             }
         };
     }
@@ -29,7 +30,8 @@ function NordigenProvider(options) {
                 cmd: {
                     list: {
                         action: async function (entize, msg) {
-                            if (null == msg.q?.country) {
+                            var _a;
+                            if (null == ((_a = msg.q) === null || _a === void 0 ? void 0 : _a.country)) {
                                 return seneca.fail('no-country');
                             }
                             let q = {
@@ -65,7 +67,8 @@ function NordigenProvider(options) {
             }
         }
     });
-    seneca.prepare(async function () {
+    seneca.prepare(prepare);
+    async function prepare() {
         const NordigenModule = await NordigenLoader;
         const Nordigen = NordigenModule.default;
         // TODO: define get:keys to get all the keys?
@@ -77,7 +80,7 @@ function NordigenProvider(options) {
         };
         this.shared.sdk = new Nordigen(config);
         await this.shared.sdk.generateToken();
-    });
+    }
     return {
         exports: {
             sdk: () => this.shared.sdk

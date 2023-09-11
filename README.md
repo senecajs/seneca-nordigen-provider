@@ -62,22 +62,7 @@ $ npm install @seneca/nordigen-provider
 
 ## Options
 
-* `debug` : boolean <i><small>false</small></i>
-
-
-Set plugin options when loading with:
-```js
-
-
-seneca.use('NordigenProvider', { name: value, ... })
-
-
-```
-
-
-<small>Note: <code>foo.bar</code> in the list above means 
-<code>{ foo: { bar: ... } }</code></small> 
-
+*None.*
 
 
 <!--END:options-->
@@ -87,9 +72,8 @@ seneca.use('NordigenProvider', { name: value, ... })
 
 ## Action Patterns
 
-* [role:entity,base:nordigen,cmd:load,name:repo,zone:provider](#-roleentitybasenordigencmdloadnamerepozoneprovider-)
-* [role:entity,base:nordigen,cmd:save,name:repo,zone:provider](#-roleentitybasenordigencmdsavenamerepozoneprovider-)
-* [sys:provider,get:info,provider:nordigen](#-sysprovidergetinfoprovidernordigen-)
+* ["role":"entity","base":"nordigen","cmd":"list","name":"institution","zone":"provider"](#-roleentitybasenordigencmdlistnameinstitutionzoneprovider-)
+* ["sys":"provider","get":"info","provider":"nordigen"](#-sysprovidergetinfoprovidernordigen-)
 
 
 <!--END:action-list-->
@@ -99,21 +83,14 @@ seneca.use('NordigenProvider', { name: value, ... })
 
 ## Action Descriptions
 
-### &laquo; `role:entity,base:nordigen,cmd:load,name:repo,zone:provider` &raquo;
+### &laquo; `"role":"entity","base":"nordigen","cmd":"list","name":"institution","zone":"provider"` &raquo;
 
-Load Nordigen repository data into an entity.
-
-
-
-----------
-### &laquo; `role:entity,base:nordigen,cmd:save,name:repo,zone:provider` &raquo;
-
-Update Nordigen repository data from an entity.
+No description provided.
 
 
 
 ----------
-### &laquo; `sys:provider,get:info,provider:nordigen` &raquo;
+### &laquo; `"sys":"provider","get":"info","provider":"nordigen"` &raquo;
 
 Get information about the provider.
 
