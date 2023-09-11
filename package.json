@@ -1,6 +1,6 @@
 {
   "name": "@seneca/nordigen-provider",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "dist/nordigen-provider.js",
   "type": "commonjs",
   "types": "dist/nordigen-provider.d.ts",
@@ -14,7 +14,7 @@
   "author": "Richard Rodger - richardrodger.com",
   "repository": {
     "type": "git",
-    "url": "git://nordigen.com/senecajs/seneca-nordigen-provider.git"
+    "url": "git://github.com/senecajs/seneca-nordigen-provider.git"
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
