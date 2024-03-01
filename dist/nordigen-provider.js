@@ -46,17 +46,17 @@ function NordigenProvider(options) {
                         }
                     },
                     /*
-          
+
                     load: {
                       action: async function(this: any, entize: any, msg: any) {
                         let q = { id: ... }
-          
+
                         let res = await this.shared.sdk.institution.getInstitution(q)
-          
+
                         if (res.status_code) {
                           seneca.fail('nordigen-api-fail', { section: 'institution', q })
                         }
-          
+
                         return entize(res)
                       }
                     }

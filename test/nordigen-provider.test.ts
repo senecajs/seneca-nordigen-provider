@@ -36,7 +36,7 @@ describe('nordigen-provider', () => {
 
     const seneca = await makeSeneca()
     let sdk = seneca.export('NordigenProvider/sdk')()
-    expect(sdk.baseUrl).toEqual('https://ob.nordigen.com/api/v2')
+    expect(sdk.baseUrl).toEqual('https://bankaccountdata.gocardless.com/api/v2')
 
     expect(await seneca.post('sys:provider,provider:nordigen,get:info'))
       .toMatchObject({
@@ -94,4 +94,3 @@ async function makeSeneca() {
     .use(NordigenProvider)
   return seneca.ready()
 }
-

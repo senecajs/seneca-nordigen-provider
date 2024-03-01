@@ -17,7 +17,7 @@ module.exports = {
         sdk: {
           name: 'nordigen-node',
           version: Pkg.dependencies['nordigen-node'],
-          baseUrl: 'https://ob.nordigen.com/api/v2'
+          baseUrl: 'https://bankaccountdata.gocardless.com/api/v2'
         }
       },
     }
