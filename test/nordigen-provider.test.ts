@@ -1,4 +1,4 @@
-/* Copyright © 2022 Seneca Project Contributors, MIT License. */
+/* Copyright © 2022-2023 Seneca Project Contributors, MIT License. */
 
 import * as Fs from 'fs'
 
@@ -92,5 +92,6 @@ async function makeSeneca() {
       }
     })
     .use(NordigenProvider)
+
   return seneca.ready()
 }

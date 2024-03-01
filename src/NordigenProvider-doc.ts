@@ -2,14 +2,15 @@
 
 
 const docs = {
-
+  messages: {
     get_info: {
-        desc: 'Get information about the provider.',
+      desc: 'Get information about the provider.',
     },
+  }
 }
 
 export default docs
 
 if ('undefined' !== typeof (module)) {
-    module.exports = docs
+  module.exports = docs
 }
